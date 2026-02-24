@@ -20,6 +20,13 @@ test_dataset = ESC50Dataset(
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 test_loader = DataLoader(test_dataset, batch_size=32)
 
+# 🔎 DEBUG SHAPE HERE
+x, y = next(iter(train_loader))
+print("Input shape:", x.shape)
+print("Label shape:", y.shape)
+
+model = SoundCNN().to(device)
+
 model = SoundCNN().to(device)
 
 criterion = torch.nn.CrossEntropyLoss()
@@ -41,3 +48,4 @@ for epoch in range(15):
         total_loss += loss.item()
 
     print(f"Epoch {epoch+1}, Loss: {total_loss:.4f}")
+

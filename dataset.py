@@ -5,6 +5,7 @@ from torch.utils.data import Dataset
 import librosa
 import librosa.display
 import numpy as np 
+import pandas as pd
 
 class ESC50Dataset(Dataset):
      def __init__(self, csv_path,audio_dir, folds):
@@ -16,16 +17,16 @@ class ESC50Dataset(Dataset):
           return len(self.data)
 
      def __getitem__(self, idx):
-          row = self.data.iloc(idx)
+          row = self.data.iloc[idx]
+
           file_path = os.path.join(self.audio_dir, row["filename"])
           label = row["target"]
 
           y, sr = librosa.load(file_path, sr=22050)
 
-          mel_spec = librosa.feature.melspectrogram(
-               y=y, sr=sr, n_mels=128
-          )
+          y, sr = librosa.load(file_path, sr=22050)
 
+          mel_spec = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128)
           mel_spec_db = librosa.power_to_db(mel_spec, ref=np.max)
 
           mel_spec_db = torch.tensor(mel_spec_db).unsqueeze(0).float()
