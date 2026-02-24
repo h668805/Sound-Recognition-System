@@ -23,6 +23,9 @@ datasets/
 *.parquet
 *.h5
 *.hdf5
+*.wav
+*.mp3
+
 
 # Model weights & checkpoints (large binary files)
 *.pt
