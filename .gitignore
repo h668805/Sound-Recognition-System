@@ -17,6 +17,7 @@ env/
 
 # Data (usually too large for git)
 data/
+meta/
 datasets/
 *.csv
 *.json
