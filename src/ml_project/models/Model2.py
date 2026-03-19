@@ -1,9 +1,4 @@
-import librosa
-import librosa.display
-import numpy as np
-import matplotlib.pyplot as plt
-import os
-from dataset2 import ESC50Dataset2
+from ml_project.models.dataset2 import ESC50Dataset2
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
