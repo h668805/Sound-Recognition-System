@@ -38,35 +38,42 @@ class SimpleCNN(nn.Module):
     def __init__(self, num_classes=50):
         super(SimpleCNN, self).__init__()
         self.conv1 = nn.Sequential(
-            nn.Conv2d(1, 16, kernel_size=3, padding=1),
-            nn.BatchNorm2d(16),
-            nn.ReLU(),
-            nn.MaxPool2d(2)
-        )
-        self.conv2 = nn.Sequential(
-            nn.Conv2d(16, 32, kernel_size=3, padding=1),
+            nn.Conv2d(1, 32, kernel_size=3, padding=1),
             nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.MaxPool2d(2)
         )
-        self.conv3 = nn.Sequential(
+        self.conv2 = nn.Sequential(
             nn.Conv2d(32, 64, kernel_size=3, padding=1),
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.MaxPool2d(2)
         )
+        self.conv3 = nn.Sequential(
+            nn.Conv2d(64, 128, kernel_size=3, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.MaxPool2d(2)
+        )
+        self.conv4 = nn.Sequential(
+            nn.Conv2d(128, 256, kernel_size=3, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+            nn.MaxPool2d(2)
+        )
         self.global_pool = nn.AdaptiveAvgPool2d(1)
         self.fc = nn.Sequential(
-            nn.Linear(64, 128),
+            nn.Linear(256, 256),
             nn.ReLU(),
             nn.Dropout(0.3),
-            nn.Linear(128, num_classes)
+            nn.Linear(256, num_classes)
         )
 
     def forward(self, x):
         x = self.conv1(x)
         x = self.conv2(x)
         x = self.conv3(x)
+        x = self.conv4(x)
         x = self.global_pool(x)
         x = x.view(x.size(0), -1)
         x = self.fc(x)
@@ -125,12 +132,12 @@ def train_and_evaluate(model, train_loader, test_loader, num_epochs, lr, model_n
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# print("Training SimpleCNN")
-# simple_model = SimpleCNN(num_classes=50)
-# train_and_evaluate(simple_model, train_loader, test_loader, num_epochs=40, lr=0.001, model_name="SimpleCNN")
+print("Training SimpleCNN")
+simple_model = SimpleCNN(num_classes=50)
+train_and_evaluate(simple_model, train_loader, test_loader, num_epochs=40, lr=0.001, model_name="SimpleCNN")
 
-print("\nTraining ResNet")
-resnet_model = ResNetAudio(num_classes=50)
-train_and_evaluate(resnet_model, train_loader, test_loader, num_epochs=40, lr=0.0001, model_name="ResNet")
+#print("\nTraining ResNet")
+#resnet_model = ResNetAudio(num_classes=50)
+#train_and_evaluate(resnet_model, train_loader, test_loader, num_epochs=40, lr=0.0001, model_name="ResNet")
 
 

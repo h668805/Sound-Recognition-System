@@ -24,6 +24,7 @@ class ESC50Dataset2(Dataset):
             y, sr = librosa.load(file_path, sr=22050)
             mel_spec = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128)
             mel_spec_db = librosa.power_to_db(mel_spec, ref=np.max)
+            mel_spec_db = (mel_spec_db - mel_spec_db.mean()) / (mel_spec_db.std() + 1e-6)
             mel_spec_db = torch.tensor(mel_spec_db).unsqueeze(0).float()
             self.spectrograms.append(mel_spec_db)
             self.labels.append(torch.tensor(row["target"]).long())
